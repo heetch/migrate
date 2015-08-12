@@ -6,11 +6,21 @@ import (
 )
 
 // Add Driver URLs here to test basic Up, Down, .. functions.
-var driverUrls = []string{
-	"postgres://localhost/migratetest?sslmode=disable",
-}
+var (
+	driverUrls = []string{
+		"postgres://localhost/migratetest?sslmode=disable",
+	}
+	index = 0
+)
 
 func TestCreate(t *testing.T) {
+	index = 0
+	timestamp = func() string {
+		values := []string{"20150811211801", "20150811211802"}
+		value := values[index]
+		index++
+		return value
+	}
 	for _, driverUrl := range driverUrls {
 		t.Logf("Test driver: %s", driverUrl)
 		tmpdir, err := ioutil.TempDir("/tmp", "migrate-test")
@@ -33,8 +43,8 @@ func TestCreate(t *testing.T) {
 			t.Fatal("Expected 2 new files, got", len(files))
 		}
 		expectFiles := []string{
-			"0001_test_migration.up.sql", "0001_test_migration.down.sql",
-			"0002_another_migration.up.sql", "0002_another_migration.down.sql",
+			"20150811211801_test_migration.up.sql", "20150811211801_test_migration.down.sql",
+			"20150811211802_another_migration.up.sql", "20150811211802_another_migration.down.sql",
 		}
 		foundCounter := 0
 		for _, expectFile := range expectFiles {
@@ -52,6 +62,13 @@ func TestCreate(t *testing.T) {
 }
 
 func TestReset(t *testing.T) {
+	index = 0
+	timestamp = func() string {
+		values := []string{"20150811211801", "20150811211802"}
+		value := values[index]
+		index++
+		return value
+	}
 	for _, driverUrl := range driverUrls {
 		t.Logf("Test driver: %s", driverUrl)
 		tmpdir, err := ioutil.TempDir("/tmp", "migrate-test")
@@ -70,13 +87,20 @@ func TestReset(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if version != 2 {
-			t.Fatalf("Expected version 2, got %v", version)
+		if version != 20150811211802 {
+			t.Fatalf("Expected version 20150811211802, got %v", version)
 		}
 	}
 }
 
 func TestDown(t *testing.T) {
+	index = 0
+	timestamp = func() string {
+		values := []string{"20150811211801", "20150811211802"}
+		value := values[index]
+		index++
+		return value
+	}
 	for _, driverUrl := range driverUrls {
 		t.Logf("Test driver: %s", driverUrl)
 		tmpdir, err := ioutil.TempDir("/tmp", "migrate-test")
@@ -95,8 +119,8 @@ func TestDown(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if version != 2 {
-			t.Fatalf("Expected version 2, got %v", version)
+		if version != 20150811211802 {
+			t.Fatalf("Expected version 20150811211802, got %v", version)
 		}
 
 		errs, ok = DownSync(driverUrl, tmpdir)
@@ -114,6 +138,13 @@ func TestDown(t *testing.T) {
 }
 
 func TestUp(t *testing.T) {
+	index = 0
+	timestamp = func() string {
+		values := []string{"20150811211801", "20150811211802"}
+		value := values[index]
+		index++
+		return value
+	}
 	for _, driverUrl := range driverUrls {
 		t.Logf("Test driver: %s", driverUrl)
 		tmpdir, err := ioutil.TempDir("/tmp", "migrate-test")
@@ -144,13 +175,20 @@ func TestUp(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if version != 2 {
-			t.Fatalf("Expected version 2, got %v", version)
+		if version != 20150811211802 {
+			t.Fatalf("Expected version 20150811211802, got %v", version)
 		}
 	}
 }
 
 func TestRedo(t *testing.T) {
+	index = 0
+	timestamp = func() string {
+		values := []string{"20150811211801", "20150811211802"}
+		value := values[index]
+		index++
+		return value
+	}
 	for _, driverUrl := range driverUrls {
 		t.Logf("Test driver: %s", driverUrl)
 		tmpdir, err := ioutil.TempDir("/tmp", "migrate-test")
@@ -169,8 +207,8 @@ func TestRedo(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if version != 2 {
-			t.Fatalf("Expected version 2, got %v", version)
+		if version != 20150811211802 {
+			t.Fatalf("Expected version 20150811211802, got %v", version)
 		}
 
 		errs, ok = RedoSync(driverUrl, tmpdir)
@@ -181,13 +219,20 @@ func TestRedo(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if version != 2 {
-			t.Fatalf("Expected version 2, got %v", version)
+		if version != 20150811211802 {
+			t.Fatalf("Expected version 20150811211802, got %v", version)
 		}
 	}
 }
 
 func TestMigrate(t *testing.T) {
+	index = 0
+	timestamp = func() string {
+		values := []string{"20150811211801", "20150811211802"}
+		value := values[index]
+		index++
+		return value
+	}
 	for _, driverUrl := range driverUrls {
 		t.Logf("Test driver: %s", driverUrl)
 		tmpdir, err := ioutil.TempDir("/tmp", "migrate-test")
@@ -206,8 +251,8 @@ func TestMigrate(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if version != 2 {
-			t.Fatalf("Expected version 2, got %v", version)
+		if version != 20150811211802 {
+			t.Fatalf("Expected version 20150811211802, got %v", version)
 		}
 
 		errs, ok = MigrateSync(driverUrl, tmpdir, -2)
@@ -230,8 +275,8 @@ func TestMigrate(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if version != 1 {
-			t.Fatalf("Expected version 1, got %v", version)
+		if version != 20150811211801 {
+			t.Fatalf("Expected version 20150811211801, got %v", version)
 		}
 	}
 }
