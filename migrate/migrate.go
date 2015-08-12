@@ -18,7 +18,9 @@ import (
 	pipep "github.com/heetch/migrate/pipe"
 )
 
-var nowFunc = time.Now
+var timestamp = func() string {
+	return time.Now().Format("20060102150405")
+}
 
 // Up applies all available migrations
 func Up(pipe chan interface{}, url, migrationsPath string) {
@@ -215,9 +217,8 @@ func Create(url, migrationsPath, name string) (*file.MigrationFile, error) {
 	if err != nil {
 		return nil, err
 	}
-	now := nowFunc()
 
-	versionStr := now.Format("20060102150405")
+	versionStr := timestamp()
 	version, err := strconv.ParseUint(versionStr, 10, 64)
 	if err != nil {
 		return nil, err

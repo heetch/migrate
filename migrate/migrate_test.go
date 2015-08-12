@@ -3,7 +3,6 @@ package migrate
 import (
 	"io/ioutil"
 	"testing"
-	"time"
 )
 
 // Add Driver URLs here to test basic Up, Down, .. functions.
@@ -11,14 +10,16 @@ var (
 	driverUrls = []string{
 		"postgres://localhost/migratetest?sslmode=disable",
 	}
-	sec = 0
+	index = 0
 )
 
 func TestCreate(t *testing.T) {
-	sec = 0
-	nowFunc = func() time.Time {
-		sec++
-		return time.Date(2015, time.August, 11, 21, 18, sec, 0, time.Local)
+	index = 0
+	timestamp = func() string {
+		values := []string{"20150811211801", "20150811211802"}
+		value := values[index]
+		index++
+		return value
 	}
 	for _, driverUrl := range driverUrls {
 		t.Logf("Test driver: %s", driverUrl)
@@ -61,10 +62,12 @@ func TestCreate(t *testing.T) {
 }
 
 func TestReset(t *testing.T) {
-	sec = 0
-	nowFunc = func() time.Time {
-		sec++
-		return time.Date(2015, time.August, 11, 21, 18, sec, 0, time.Local)
+	index = 0
+	timestamp = func() string {
+		values := []string{"20150811211801", "20150811211802"}
+		value := values[index]
+		index++
+		return value
 	}
 	for _, driverUrl := range driverUrls {
 		t.Logf("Test driver: %s", driverUrl)
@@ -91,10 +94,12 @@ func TestReset(t *testing.T) {
 }
 
 func TestDown(t *testing.T) {
-	sec = 0
-	nowFunc = func() time.Time {
-		sec++
-		return time.Date(2015, time.August, 11, 21, 18, sec, 0, time.Local)
+	index = 0
+	timestamp = func() string {
+		values := []string{"20150811211801", "20150811211802"}
+		value := values[index]
+		index++
+		return value
 	}
 	for _, driverUrl := range driverUrls {
 		t.Logf("Test driver: %s", driverUrl)
@@ -133,12 +138,13 @@ func TestDown(t *testing.T) {
 }
 
 func TestUp(t *testing.T) {
-	sec = 0
-	nowFunc = func() time.Time {
-		sec++
-		return time.Date(2015, time.August, 11, 21, 18, sec, 0, time.Local)
+	index = 0
+	timestamp = func() string {
+		values := []string{"20150811211801", "20150811211802"}
+		value := values[index]
+		index++
+		return value
 	}
-
 	for _, driverUrl := range driverUrls {
 		t.Logf("Test driver: %s", driverUrl)
 		tmpdir, err := ioutil.TempDir("/tmp", "migrate-test")
@@ -176,12 +182,13 @@ func TestUp(t *testing.T) {
 }
 
 func TestRedo(t *testing.T) {
-	sec = 0
-	nowFunc = func() time.Time {
-		sec++
-		return time.Date(2015, time.August, 11, 21, 18, sec, 0, time.Local)
+	index = 0
+	timestamp = func() string {
+		values := []string{"20150811211801", "20150811211802"}
+		value := values[index]
+		index++
+		return value
 	}
-
 	for _, driverUrl := range driverUrls {
 		t.Logf("Test driver: %s", driverUrl)
 		tmpdir, err := ioutil.TempDir("/tmp", "migrate-test")
@@ -219,12 +226,13 @@ func TestRedo(t *testing.T) {
 }
 
 func TestMigrate(t *testing.T) {
-	sec = 0
-	nowFunc = func() time.Time {
-		sec++
-		return time.Date(2015, time.August, 11, 21, 18, sec, 0, time.Local)
+	index = 0
+	timestamp = func() string {
+		values := []string{"20150811211801", "20150811211802"}
+		value := values[index]
+		index++
+		return value
 	}
-
 	for _, driverUrl := range driverUrls {
 		t.Logf("Test driver: %s", driverUrl)
 		tmpdir, err := ioutil.TempDir("/tmp", "migrate-test")
