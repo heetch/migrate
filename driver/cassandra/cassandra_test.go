@@ -2,6 +2,7 @@ package cassandra
 
 import (
 	"net/url"
+	"strings"
 	"testing"
 	"time"
 
@@ -21,7 +22,8 @@ func TestMigrate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cluster := gocql.NewCluster(u.Host)
+	splittedHosts := strings.Split(u.Host, ",")
+	cluster := gocql.NewCluster(splittedHosts...)
 	cluster.Keyspace = u.Path[1:len(u.Path)]
 	cluster.Consistency = gocql.All
 	cluster.Timeout = 1 * time.Minute
